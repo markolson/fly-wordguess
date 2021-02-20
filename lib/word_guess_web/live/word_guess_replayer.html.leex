@@ -1,0 +1,40 @@
+<%= if @elapsed > 0 do %>
+
+<div style="display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px solid #888">
+  <%= if @complete do %>
+    <p style="margin: 0px"><%= format_time(Decimal.to_float(@game.time)) %></p>
+  <% else %>
+    <p style="margin: 0px; <%= if round(min(@elapsed, Decimal.to_float(@game.time))) == @elapsed do %>font-weight: bold <% end %>"><%= format_time(min(@elapsed, Decimal.to_float(@game.time))) %>
+  <% end %>
+</div>
+
+<div data-before style="margin: 0px; font-size: 1em; line-height: 1em;">
+  <%= for guess <- @wrong_guesses.before do %>
+    <%= if @complete do %>
+      <p style="margin: 0px; height: 1em; line-height: 1em;"><%= guess %></p>
+    <% else %>
+     <div style="margin: 0px; height: 1em; background-color: #999999;; width: <%= String.length(guess) * 8 %>px"></div>
+    <% end  %>
+  <% end %>
+</div>
+
+
+<% color = Map.get(%{:lost => "8B0000", :won => "008B00", nil => "666666"}, @replay_state) %>
+<%= if @complete do %>
+   <div style="margin: 0px; line-height: 1em; font-weight: bold; color: #<%= color %>"><%= @word %></div>
+<% else  %>
+  <div style="display: block; height: 1.4em; background-color: #<%= color %>; margin-left: 8px">&nbsp;</div>
+<% end  %>
+
+<div data-before style="margin: 0px; font-size: 1em; line-height: 1em;">
+  <%= for guess <- @wrong_guesses.after do %>
+    <%= if @complete do %>
+      <p style="margin: 0px; height: 1em; line-height: 1em;"><%= guess %></p>
+    <% else %>
+
+     <div style="margin: 0px; height: 1em; background-color: #999999; width: <%= String.length(guess) * 8 %>px"></div>
+    <% end  %>
+  <% end %>
+</div>
+<% else  %>
+<% end %>

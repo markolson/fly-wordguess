@@ -1,7 +1,9 @@
-defmodule WordGuess.WordGuess.Replay do
+defmodule WordGuess.Game.Replay do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "replays" do
     field :day, :string
     field :guesses, {:array, :map}

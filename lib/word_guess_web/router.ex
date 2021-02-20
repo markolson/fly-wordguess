@@ -13,8 +13,8 @@ defmodule WordGuessWeb.Router do
   scope "/", WordGuessWeb do
     pipe_through :browser
 
-    live "/word-guess", WordGuessLive
-    live "/word-guess/vs/:uuid", WordGuessLive
+    live "/", WordGuessLive
+    live "/vs/:uuid", WordGuessLive
   end
 
   if Mix.env() in [:dev, :test] do

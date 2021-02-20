@@ -1,0 +1,84 @@
+
+<div style="margin: 0px">
+  <%= @date %> on
+  <%= if @state != :playing do %>
+    <%= if @level == "easy" do %>
+      easy (try <%= live_patch "hard", to: Routes.live_path(@socket, WordGuessWeb.WordGuessLive, date: @date, level: :hard), id: "go-hard" %>)
+    <% else %>
+      hard (try <%= live_patch "easy", to: Routes.live_path(@socket, WordGuessWeb.WordGuessLive, date: @date, level: :easy), id: "go-easy" %>)
+    <% end %>
+  <% else %>
+    <%= @level %>
+  <% end %>
+</div>
+
+<%= if @state == :won do %><div style="text-align: center; color: #0033ff">YOU WIN!</div><% end %>
+<%= if @state == :resigned do %><div style="text-align: center; color: #0033ff">QUITTER!</div><% end %>
+
+<section style="display: flex">
+<div style="width: 400px">
+
+<%= if @state != :idle do %>
+  <div style="display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px solid #888">
+    <div <%= if round(@elapsed) == @elapsed do %>style="font-weight: bold" <% end %>><%= format_time(@elapsed) %></div>
+    <div><%= if @guesses > 1 do %><%= @guesses %> Guesses<% end %></div>
+  </div>
+<% end  %>
+
+
+  <%= if @replay_uuid do %>
+    VS link: <a href="/vs/<%= @replay_uuid %>" data-replay="<%= @replay_uuid %>"><%= @replay_uuid %></a>
+  <% end  %>
+
+  <%= if Enum.count(@wrong_guesses.before) > 0 do %>
+    <section style="margin: 0px; display: flex">
+      <div style="line-height: 0.9em; font-size: 0.9em; display: inline-block; align-self: flex-end; align-items: flex-end; width: 110px">
+        The word is<br />
+        <b>after this &rarr;</b>
+      </div>
+      <div data-before style="font-size: 1em; line-height: 1em; margin-left: 8px">
+        <%= for guess <- @wrong_guesses.before do %><p style="margin: 0px;"><%= guess %></p> <% end %>
+      </div>
+    </section>
+  <% end  %>
+
+  <%= if @state == :idle || @state == :playing do %>
+  <section style="margin: 0px; margin-left: 120px">
+    <%= f = form_for :word, "#", [phx_submit: "submit", id: "word-guess", style: "display: flex; margin: 0;"] %>
+      <%= text_input f, :guess, [phx_keyup: "start-elapsed", phx_throttle: 1000, placeholder: "Guess a word...", autofill: false, style: "height: 2em; flex-grow: 1; margin: 0"] %>
+    </form>
+    <%= if @error do %><div style="color: #ff3300"><%= @error %></div><% end %>
+    <%= if @guesses > 0 do %><a style="margin: 0; letter-spacing: <%= round(@elapsed / 30) %>px; font-size: <%= 10 + round(@elapsed / 15) %>px; color: #ff3300" href="#" id="give-up" phx-click="give-up">give up</a><% end %>
+  </section>
+  <% end %>
+  <%= if @state == :won do %>
+    <p style="margin: 0px; font-weight: bold; margin-left: 120px""><%= @word %></p>
+  <% end %>
+  <%= if @state == :resigned do  %>
+    <p style="margin: 0px; font-weight: bold; color: #ff3300; margin-left: 120px""><%= @word %></p>
+  <% end %>
+
+  <%= if Enum.count(@wrong_guesses.after) > 0 do %>
+  <section style="margin: 0px; display: flex">
+    <div style="line-height: 0.9em; font-size: 0.9em; display: inline-block; width: 110px">
+      The word is &rarr;<br />
+      <b>before this</b>
+    </div>
+    <div data-after style="font-size: 1em; line-height: 1em; margin-left: 8px">
+      <%= for guess <- @wrong_guesses.after do %><p style="margin: 0px;"><%= guess %></p><% end %>
+    </div>
+  </section>
+  <% end %>
+</div>
+
+<%= if @vs_replay_game do %>
+  <div style="margin-left: 20px; width: 250px">
+    <%= live_component @socket, WordGuessWeb.WordGuessReplayer,
+    id: @vs_replay_game.id,
+    game: @vs_replay_game,
+    elapsed: @elapsed,
+    complete: @state == :won || @state == :resigned %>
+  </div>
+<% end  %>
+
+</section>
