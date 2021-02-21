@@ -1,0 +1,2 @@
+.dockerignoreassets/node_modules
+_build 

@@ -17,7 +17,7 @@ defmodule WordGuessWeb.Router do
     live "/vs/:uuid", WordGuessLive
   end
 
-  if Mix.env() in [:dev, :test] do
+  if Mix.env() in [:dev, :test, :prod] do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do

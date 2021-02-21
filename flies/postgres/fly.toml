@@ -1,0 +1,22 @@
+# fly.toml file generated for word-guess-postgres on 2021-02-20T13:40:24-05:00
+
+app = "word-guess-postgres"
+
+[build]
+  image = "postgres:13.1"
+
+
+[experimental]
+  private_network = true
+
+[mount]
+  destination = "/var/lib/postgresql/"
+  source = "postgres"
+
+[[services]]
+  internal_port = 5432
+  protocol = "tcp"
+
+  [[services.tcp_checks]]
+    interval = 10000
+    timeout = 2000
