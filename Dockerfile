@@ -10,9 +10,6 @@ WORKDIR /app
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-# set build ENV
-ENV SECRET_KEY_BASE=PMyRmvJQhy081VCdEsN+QDTMt1KvIYzrbkUJlmzqCeI7heo83DBBA18LgiqW+sIs
-
 # install mix dependencies
 COPY mix.exs mix.lock ./
 COPY config config
@@ -51,7 +48,8 @@ ADD entrypoint.sh ./
 ENV HOME=/app
 ENV MIX_ENV=prod
 
-ENV DATABASE_URL=postgresql://postgres:Savannah@word-guess-postgres.internal/word_guess
+ENV SECRET_KEY_BASE=set-with-fly-secrets-set-with-fly-secrets-set-with-fly-secrets-set-with-fly-secrets
+ENV DATABASE_URL=postgresql://set-with-fly-secrets/word_guess
 ENV PORT=4000
 
 ENTRYPOINT ["/app/entrypoint.sh"]
