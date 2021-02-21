@@ -12,14 +12,15 @@ defmodule Game do
       ** (File.Error) could not stream "priv/words/easy-peasy.gz": no such file or directory
   """
   def wordlist(filename) do
-    Path.join("priv/words/", filename <> ".gz")
+    path = Path.join("priv/words/", filename <> ".gz")
+
+    Application.app_dir(:word_guess, path)
     |> File.stream!()
     |> StreamGzip.gunzip()
     |> Enum.into("")
     |> String.split("\n")
   end
 
-  @external_resource "priv/words/english"
   @all_words File.read!("priv/words/english") |> String.split("\n", trim: true)
 
   def is_a_word?(guess) do
