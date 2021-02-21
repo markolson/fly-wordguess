@@ -3,11 +3,10 @@ use Mix.Config
 # Configure your database
 config :word_guess, WordGuess.Repo,
   username: "postgres",
-  password: "Savannah",
-  database: "word_guess",
-  hostname: "word-guess-postgres.internal",
+  password: "postgres",
+  database: "word_guess_dev",
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  socket_options: [:inet6],
   pool_size: 10
 
 # For development, we disable any cache and enable
