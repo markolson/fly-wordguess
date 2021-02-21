@@ -87,7 +87,6 @@ defmodule WordGuessWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import WordGuessWeb.ErrorHelpers
       import WordGuessWeb.Gettext
       alias WordGuessWeb.Router.Helpers, as: Routes
     end
